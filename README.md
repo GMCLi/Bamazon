@@ -24,5 +24,5 @@ If there is enough stock, the user's order will be fulfilled. Otherwise, it will
     * If enough stock, the order will be fulfilled
     ![Fulfilled](/screenshots/OrderFulfilled.PNG)
     * If not enough stock, the order will not be fulfilled, choose to start again
-    ![Insufficient](/screenshots/Insufficient Quantity.PNG)
+    ![Insufficient](/screenshots/InsufficientQuantity.PNG)
 
