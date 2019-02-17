@@ -3,6 +3,7 @@ var inquirer = require("inquirer");
 var stock;
 var needed;
 var item;
+var price;
 
 //Connection
 //.........................................
@@ -32,7 +33,7 @@ function inventorySearch() {
   var query = "SELECT * FROM bamazon.products;";
   connection.query(query, function (err, res) {
     for (var i = 0; i < res.length; i++) {
-      console.log(res);
+      console.table(res[i]);
     }
     idSearch();
   });
@@ -50,6 +51,7 @@ function idSearch() {
     })
     .then(function (answer) {
       item = answer.id;
+
       console.log("Item ID selected: " + item + "\n----------------------------");
       var query = "SELECT * FROM bamazon.products WHERE ?";
       connection.query(query, [{ item_id: answer.id }], function (err, res) {
@@ -57,6 +59,7 @@ function idSearch() {
           console.log("Item ID: " + res[i].item_id + " || Product: " + res[i].product_name + " || Department: " + res[i].department_name + " || Price: " + res[i].price + " || Quantity: " + res[i].stock_quantity
             + "\n--------------------------------------------------------------------");
           stock = res[i].stock_quantity;
+          price = res[i].price;
         }
         //Compare Request Quantity with Stock Quantity
         //.........................................
@@ -77,8 +80,8 @@ function stockCheck() {
         if (err) throw err;
       })
       needed = answer.units;
-      console.log("want: " + needed);
-      console.log("available: " + stock);
+      console.log("You Wanted: " + needed);
+      console.log("Units Available: " + stock);
       //IF ENOUGH UNITS
       if (answer.units == stock) {
         console.log("Fulfilling order.")
@@ -90,11 +93,26 @@ function stockCheck() {
       }
 
       //IF NOT ENOUGH UNITS
-      else (console.log("Insufficient quantity!"))
-
-    })
+      else (notEnough());
+})
 }
 
+function notEnough() {
+  console.log("Insufficient quantity!")
+  inquirer
+  .prompt({
+    name: "restart",
+    type: "list",
+    message: "Would you like to start again?",
+    choices: ["Yes", "No"]
+  })
+  .then(function (answer) {
+    console.log(answer.restart)
+    if (answer.restart === "Yes") {
+      inventorySearch();
+    }
+  })
+}
 
 function updateOrder() {
   console.log("Updating your order \n------------------------------------------------");
@@ -102,7 +120,7 @@ function updateOrder() {
     "UPDATE products SET ? WHERE ?",
     [
       {
-        stock_quantity: stock-needed
+        stock_quantity: stock - needed
       },
       {
         item_id: item
@@ -110,16 +128,10 @@ function updateOrder() {
     ],
 
     function (err, res) {
-      console.log(res.affectedRows + " products updated!\n");
+      // console.log(res.affectedRows + " products updated!\n");
 
     }
   );
-  console.log(query.sql);
+  console.log("Total Cost: $" + price * needed);
+  connection.end();
 };
-
-
-
-//   // logs the actual query being run
-//   console.log(query.sql);
-// }
-
