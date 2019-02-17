@@ -19,10 +19,10 @@ If there is enough stock, the user's order will be fulfilled. Otherwise, it will
 2. Full stock information
 ![FullSearch](/screenshots/FullSearch.PNG)
 3. User picks an item by ID
-![IDSearch](/screenshots/PromptIDSearch.PNG)
+    ![IDSearch](/screenshots/PromptIDSearch.PNG)
 4. User picks the quantity ![PromptUnits](/screenshots/SearchedIDPromptUnits.PNG)
     * If enough stock, the order will be fulfilled
     ![Fulfilled](/screenshots/OrderFulfilled.PNG)
     * If not enough stock, the order will not be fulfilled, choose to start again
-    ![Insufficient](/screenshots/InsufficientQuantity.PNG)
+    ![Insufficient](/screenshots/Insufficient Quantity.PNG)
 
